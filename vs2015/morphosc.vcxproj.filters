@@ -1,0 +1,84 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Source Files\oscpack">
+      <UniqueIdentifier>{df394164-7380-4fe3-bb2b-efa121dbce33}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\misc">
+      <UniqueIdentifier>{7a103e0b-11b5-471a-b29e-0f57daf1179b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\morphosc">
+      <UniqueIdentifier>{42cd013e-e537-45c1-b267-adefdb761f7d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="configs">
+      <UniqueIdentifier>{1d07aea5-265d-4389-9946-1c7a79228592}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\src\oscpack\ip\win32\NetworkingUtils.cpp">
+      <Filter>Source Files\oscpack</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\oscpack\ip\win32\UdpSocket.cpp">
+      <Filter>Source Files\oscpack</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\oscpack\osc\OscOutboundPacketStream.cpp">
+      <Filter>Source Files\oscpack</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\oscpack\osc\OscTypes.cpp">
+      <Filter>Source Files\oscpack</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\misc\NosuchUtil.cpp">
+      <Filter>Source Files\misc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\misc\ptwinmm.c">
+      <Filter>Source Files\misc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\misc\XGetopt.cpp">
+      <Filter>Source Files\misc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\misc\cJSON.cpp">
+      <Filter>Source Files\misc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\morphosc\morphosc.cpp">
+      <Filter>Source Files\morphosc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\oscpack\ip\IpEndpointName.cpp">
+      <Filter>Source Files\oscpack</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\src\misc\NosuchUtil.h">
+      <Filter>Source Files\misc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\misc\porttime.h">
+      <Filter>Source Files\misc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\misc\xgetopt.h">
+      <Filter>Source Files\misc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\misc\cJSON.h">
+      <Filter>Source Files\misc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\morphosc\morphosc.h">
+      <Filter>Source Files\morphosc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\oscpack\ip\IpEndpointName.h">
+      <Filter>Source Files\oscpack</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\morphosc_default.json">
+      <Filter>configs</Filter>
+    </None>
+    <None Include="..\morphosc.json">
+      <Filter>configs</Filter>
+    </None>
+    <None Include="..\morphosc_0.json">
+      <Filter>configs</Filter>
+    </None>
+  </ItemGroup>
+</Project>

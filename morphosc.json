@@ -1,0 +1,74 @@
+{
+  "morphs": {
+    "SM01164910304": {
+      "x": {
+        "osc": "/activeclip/video/effect1/param1/values",
+        "min": 0.0,
+        "max": 1.0
+      },
+      "y": {
+        "osc": "/activeclip/video/effect2/param1/values",
+        "min": 0.0,
+        "max": 1.0
+      },
+      "z": {
+        "osc": "/activeclip/video/effect3/param1/values",
+        "min": 0.0,
+        "max": 1.0
+      }
+    },
+    "SM01164910492": {
+      "x": {
+        "osc": "/activeclip/video/effect1/param1/values",
+        "min": 0.0,
+        "max": 1.0
+      },
+      "y": {
+        "osc": "/activeclip/video/effect2/param1/values",
+        "min": 0.0,
+        "max": 1.0
+      },
+      "z": {
+        "osc": "/activeclip/video/effect3/param1/values",
+        "min": 0.0,
+        "max": 1.0
+      }
+    },
+    "SM01164910472": {
+      "x": {
+        "osc": "/activeclip/video/effect1/param1/values",
+        "min": 0.0,
+        "max": 1.0
+      },
+      "y": {
+        "osc": "/activeclip/video/effect2/param1/values",
+        "min": 0.0,
+        "max": 1.0
+      },
+      "z": {
+        "osc": "/activeclip/video/effect3/param1/values",
+        "min": 0.0,
+        "max": 1.0
+      }
+    },
+    "SM01164910309": {
+      "x": {
+        "osc": "/activeclip/video/effect1/param1/values",
+        "min": 0.0,
+        "max": 1.0
+      },
+      "y": {
+        "osc": "/activeclip/video/effect2/param1/values",
+        "min": 0.0,
+        "max": 1.0
+      },
+      "z": {
+        "osc": "/activeclip/video/effect3/param1/values",
+        "min": 0.0,
+        "max": 1.0
+      }
+    }
+  },
+  "maxforce": 1500.0,
+  "host": "7000@127.0.0.1"
+}

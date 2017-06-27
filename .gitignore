@@ -1,3 +1,11 @@
+tmp/
+build/
+*.db
+*.opendb
+*~
+*.swp
+vs2015/.vs
+
 # Prerequisites
 *.d
 
