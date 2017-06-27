@@ -5,6 +5,7 @@ build/
 *~
 *.swp
 vs2015/.vs
+vs2015/x64/
 
 # Prerequisites
 *.d

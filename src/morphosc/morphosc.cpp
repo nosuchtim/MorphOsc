@@ -9,7 +9,7 @@ volatile sig_atomic_t ctrl_c_requested = false;
 bool verbose = false;
 
 int Morph::m_next_initial_id = 11000;
-float MorphHandler::MaxForce = 1000.0;
+float MorphHandler::MaxForce = 1500.0;
 
 void handle_ctrl_c(int sig)
 {
@@ -18,10 +18,11 @@ void handle_ctrl_c(int sig)
 
 void
 printUsage() {
-	printf("usage: morphosc [-c {filename}] [-v] [-l]\n");
-	printf("  -c {filename}    Config filename\n");
+	printf("\n");
+	printf("usage: morphosc[-v][-l]{ configfile }\n");
 	printf("  -v               Enabled verbose output\n");
 	printf("  -l               List all Morphs and their serial numbers\n");
+	printf("  {configfile}     Config filename\n");
 	printf("\n");
 }
 
@@ -33,15 +34,12 @@ int main(int argc, char **argv)
 	bool flipx = false;
 	bool flipy = false;
 	bool listdevices = false;
-	std::string configfilename = "morphosc.json";
+	std::string configfilename;
 
 	signal(SIGINT, handle_ctrl_c);
 
-	while ((c = getopt(argc, (const char**)argv, "c:vl")) != EOF) {
+	while ((c = getopt(argc, (const char**)argv, "vl")) != EOF) {
 		switch (c) {
-		case _T('c'):
-			configfilename = optarg;
-			break;
 		case _T('v'):
 			verbose = true;
 			break;
@@ -59,11 +57,13 @@ int main(int argc, char **argv)
 		return 0;
 	}
 
-	int nleft = argc - optind;
-	if ( nleft != 0 ) {
+	// The configfile is a required argument
+	if ((argc-optind) != 1) {
 		printUsage();
 		return 1;
 	}
+
+	configfilename = argv[argc - 1];
 
 	std::string err;
 	cJSON* config = jsonReadFile(configfilename,err);
@@ -144,7 +144,7 @@ Morph::Morph(std::string serialnum, cJSON* config) {
 
 		m_x = MorphControl(cJSON_GetObjectItem(config,"x"));
 		m_y = MorphControl(cJSON_GetObjectItem(config,"y"));
-		m_z = MorphControl(cJSON_GetObjectItem(config,"z"));
+		m_force = MorphControl(cJSON_GetObjectItem(config,"force"));
 		m_flipX = false;
 		m_flipY = false;
 
@@ -204,64 +204,18 @@ MorphHandler::MorphHandler(cJSON* config, OscSender *sender) {
 	}
 }
 
-void MorphHandler::processContact(Morph* m, int id, float x, float y, float z) {
-	Cursor* c = new Cursor(id, NosuchPos(x, y, z));
+void MorphHandler::processContact(Morph* m, int id, float x, float y, float force) {
+	Cursor* c = new Cursor(id, NosuchPos(x, y, force));
 	if ( x >= 0.0 ) {
 		m_oscsender->SendContact(m->m_x, x);
 	}
 	if (y >= 0.0) {
 		m_oscsender->SendContact(m->m_y, y);
 	}
-	if ( z >= 0.0 ) {
-		m_oscsender->SendContact(m->m_z, z);
+	if ( force >= 0.0 ) {
+		m_oscsender->SendContact(m->m_force, force);
 	}
 }
-
-#if 0
-void MorphHandler::dragged(float x, float y, int sid, int cid, float force) {
-	TuioCursor *match = NULL;
-	std::list<TuioCursor*> cursorList = server->getTuioCursors();
-	// XXX - use auto here
-	for (std::list<TuioCursor*>::iterator tuioCursor = cursorList.begin(); tuioCursor != cursorList.end(); tuioCursor++) {
-		if (((*tuioCursor)->getSessionID()) == sid) {
-			match = (*tuioCursor);
-			break;
-		}
-	}
-	if (match == NULL) {
-		// An early firmware bug (since fixed) produced occasional dragged messages after a release,
-		// so we just ignore them until we get the next pressed message.
-		fprintf(stderr, "Warning, drag message after release has been ignored!\n");
-		if (server->verbose > 1) {
-			printf( "DRAG_IGNORED sid=%d\n", sid);
-		}
-		// match = server->addTuioCursorId(x,y,sid,cid);
-	}
-	else {
-		server->updateTuioCursor(match, x, y);
-		match->setForce(force);
-	}
-}
-
-void MorphHandler::released(float x, float y, int sid, int cid, float force) {
-	// printf("released  uid=%d id=%d\n",uid,id);
-	if (server->verbose > 1) {
-		printf( "RELEASED          sid=%d\n", sid);
-	}
-	std::list<TuioCursor*> cursorList = server->getTuioCursors();
-	TuioCursor *match = NULL;
-	// XXX - use auto here
-	for (std::list<TuioCursor*>::iterator tuioCursor = cursorList.begin(); tuioCursor != cursorList.end(); tuioCursor++) {
-		if (((*tuioCursor)->getSessionID()) == sid) {
-			match = (*tuioCursor);
-			break;
-		}
-	}
-	if (match != NULL) {
-		server->removeTuioCursor(match);
-	}
-}
-#endif
 
 void
 MorphHandler::listdevices() {
@@ -290,9 +244,6 @@ void MorphHandler::run() {
 		senselGetNumAvailableFrames(h, &num_frames);
 		for (unsigned int f = 0; f < num_frames; f++) {
 			senselGetFrame(h, frame);
-			// if (verbose && frame->n_contacts > 0) {
-			// 	printf("FRAME serial=%s n_contacts=%d\n", morph->m_serialnum.c_str(), frame->n_contacts);
-			// }
 			for (int i = 0; i < frame->n_contacts; i++) {
 
 				SenselContact& c = frame->contacts[i];
@@ -314,19 +265,19 @@ void MorphHandler::run() {
 					printf("Warning: Morph::MaxForce is %f, but received force of %f\n",MorphHandler::MaxForce,force);
 					force = MorphHandler::MaxForce;
 				}
-				float z_norm = force / MorphHandler::MaxForce;
+				float force_norm = force / MorphHandler::MaxForce;
 
 				char* event = "unknown";
 				switch (c.state)
 				{
 				case CONTACT_START:
 					event = "CONTACT_START";
-					processContact(morph, cid, x_norm, y_norm, z_norm);
+					processContact(morph, cid, x_norm, y_norm, force_norm);
 					break;
 
 				case CONTACT_MOVE:
 					event = "CONTACT_MOVE";
-					processContact(morph, cid, x_norm, y_norm, z_norm);
+					processContact(morph, cid, x_norm, y_norm, force_norm);
 					break;
 
 				case CONTACT_END:
@@ -340,14 +291,9 @@ void MorphHandler::run() {
 				}
 
 				if (verbose) {
-					printf("%s %s cid=%d x=%f y=%f z=%f\n",morph->m_serialnum.c_str(),event,cid,x_norm,y_norm,z_norm);
+					printf("%s %s cid=%d x=%f y=%f force=%f\n",morph->m_serialnum.c_str(),event,cid,x_norm,y_norm,force_norm);
 				}
-				// printf("TUIO  Contact ID %d, event=%s, mm coord: (%f, %f), force=%f, " \
-									// 	"major=%f, minor=%f, orientation=%f\n",
-// 	id, event, x_mm, y_mm, force, major, minor, orientation);
 			}
-
-			// server->update();
 		}
 	}
 }

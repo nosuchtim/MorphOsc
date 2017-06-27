@@ -96,7 +96,7 @@ public:
 	SenselFrameData* m_frame;
 	MorphControl m_x;
 	MorphControl m_y;
-	MorphControl m_z;
+	MorphControl m_force;
 	int m_initial_id;
 	bool m_flipX;
 	bool m_flipY;
