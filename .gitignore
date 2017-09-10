@@ -36,6 +36,5 @@ vs2015/x64/
 *.lib
 
 # Executables
-*.exe
 *.out
 *.app

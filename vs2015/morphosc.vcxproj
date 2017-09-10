@@ -140,7 +140,12 @@ XCOPY "C:\Program Files\Sensel\SenselLib\x86\LibSenselDecompress.dll" "$(TargetD
     </Link>
     <PostBuildEvent>
       <Command>XCOPY "C:\Program Files\Sensel\SenselLib\x64\LibSensel.dll" "$(TargetDir)" /Y
-XCOPY "C:\Program Files\Sensel\SenselLib\x64\LibSenselDecompress.dll" "$(TargetDir)" /Y</Command>
+XCOPY "C:\Program Files\Sensel\SenselLib\x64\LibSenselDecompress.dll" "$(TargetDir)" /Y
+XCOPY "$(TargetDir)morphosc.exe" "$(ProjectDir)..\" /Y
+XCOPY "C:\Program Files\Sensel\SenselLib\x64\LibSensel.dll" "$(ProjectDir)..\" /Y
+XCOPY "C:\Program Files\Sensel\SenselLib\x64\LibSenselDecompress.dll" "$(ProjectDir)..\" /Y
+
+</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
